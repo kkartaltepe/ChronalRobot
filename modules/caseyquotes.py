@@ -42,6 +42,19 @@ def addQuote(bot, trigger):
 	Quote(text=text, timestamp=arrow.now().timestamp)
 	bot.say("Quote added!")
 
+@adminonly
+@command("deletequote", "dq")
+def delQuote(bot, trigger):
+	requireDb()
+	number = int(trigger.group(2))
+	try:
+		quote = Quote.get(number)
+	except SQLObjectNotFound:
+		bot.say("I can't delete what isnt there!")
+	else:
+		Quote.delete(quote.id)
+		bot.say("Quote #%d deleted" % quote.id)
+
 @whitelisted_streamtime
 @command("randomquote", "rq")
 def randomQuote(bot, trigger):
